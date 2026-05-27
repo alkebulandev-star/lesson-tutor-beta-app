@@ -1,0 +1,1290 @@
+/* ════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS MODULE (v14)
+   ────────────────────────────────────────────────────────────────
+   One stylesheet covering the highest-impact mobile issues across:
+     - Landing page
+     - Classroom (sidebar drawer, top bar, lesson body)
+     - Voice Teacher (floating bar, caption, teach me button)
+     - Exam Centre (rules, paper, theory)
+     - Kids Zone (game grids, letter tiles)
+     - Parent Hub (tabs, cards, charts)
+     - Live Arena (lobby, game modal, leaderboard)
+     - Languages page (phrase cards, conversation grid)
+     - Modals (auth, language picker, child report)
+
+   v14: Android 100vw scrollbar fix, 100dvh, safe-area-insets,
+        voice teacher mobile, formula/table overflow, input zoom fix,
+        tap-highlight removal, touch target enforcement
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  --mob-touch-min: 44px;  /* WCAG-recommended minimum touch target */
+  --mob-pad: 14px;
+}
+
+/* ═══════════ Always-on fixes (all screen sizes) ═══════════ */
+
+/* Prevent horizontal scroll trap from any oversized element */
+body { overflow-x: hidden; }
+
+/* iOS safe-area for ALL fixed-bottom elements */
+#lt-tap-hear, .floating-cta, .vt-bar, .vt-caption, #essayToast {
+  padding-bottom: max(14px, env(safe-area-inset-bottom)) !important;
+}
+
+/* Floating Question FAB — hidden on desktop, JS controls visibility on mobile */
+@media (min-width: 641px) {
+  .mob-q-fab { display: none !important; }
+}
+
+/* ── Hide floating FABs and tour during exam (body.in-exam set by JS) ── */
+body.in-exam #lt-spot-fab,
+body.in-exam #lt-srv-pill,
+body.in-exam #lt-spot-objpop,
+body.in-exam #lt-spot-overlay,
+body.in-exam .lt-spot-card {
+  display: none !important;
+}
+
+/* Formula/table overflow protection */
+.formula-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.formula-display { max-width: 100%; overflow-wrap: break-word; word-break: break-word; }
+.worked-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.les-table td { word-break: break-word; }
+
+/* ═══════════ Theory writing — maximize space (all sizes) ═══════════ */
+/* Toolbar: always single-row scroll — never steal writing space */
+.theory-toolbar {
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+}
+.theory-toolbar::-webkit-scrollbar { display: none !important; }
+.tb-group { flex-shrink: 0 !important; }
+
+/* Add-block bar: always single-row scroll */
+.tap-add-bar {
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+}
+.tap-add-bar::-webkit-scrollbar { display: none !important; }
+.tap-add-btn { flex-shrink: 0 !important; white-space: nowrap !important; }
+
+/* Toolbar labels: hidden — buttons are self-explanatory */
+.tb-lbl { display: none !important; }
+
+/* Booklet header: compact */
+.tap-header { padding: 4px 14px !important; }
+.tap-booklet-seal { height: 28px !important; }
+.tap-booklet-sub { font-size: .56rem !important; }
+
+/* Writing area (tap-content) must take ALL remaining space */
+.tap-content { flex: 1 1 0% !important; min-height: 0 !important; }
+
+/* Answer textarea: generous writing space */
+.ab-textarea { min-height: 140px !important; }
+
+/* ═══════════ Phone — ≤ 640px ═══════════ */
+@media (max-width: 640px) {
+
+  /* ─── Universal ─── */
+  html, body {
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
+  body {
+    font-size: 15px;
+  }
+  /* Make all buttons and tappable elements meet a minimum size */
+  button:not([class*="icon"]):not([class*="close"]):not([class*="chip"]) {
+    min-height: var(--mob-touch-min);
+  }
+
+  /* ─── Landing page ─── */
+  #pg-landing .l-nav { padding: 10px 12px !important; }
+  #pg-landing .nav-l { gap: 8px !important; }
+  #pg-landing .nav-r {
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  #pg-landing .nav-r > * { font-size: .8rem; }
+  #pg-landing .nav-cta {
+    padding: 8px 14px !important;
+    font-size: .82rem !important;
+  }
+  /* Hide desktop-only links on phone — burger menu handles them */
+  #pg-landing .nav-link.l-desk { display: none !important; }
+  /* Hero */
+  #pg-landing .hero-h1, #pg-landing .lt-hero-title, #pg-landing h1 {
+    font-size: 1.9rem !important;
+    line-height: 1.15 !important;
+  }
+  #pg-landing .hero-sub, #pg-landing .lt-hero-sub {
+    font-size: 1rem !important;
+  }
+  /* Feature/section grids: collapse to 1 column */
+  #pg-landing [style*="grid-template-columns"][style*="repeat"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Section padding */
+  #pg-landing section[style*="padding:80px"],
+  #pg-landing section[style*="padding: 80px"] {
+    padding: 50px 5vw !important;
+  }
+  /* Mother-tongue + languages cards: stack */
+  #mother-tongue [style*="grid-template-columns"],
+  #languages [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* ─── Classroom ─── */
+  #pg-classroom .cl-topbar,
+  .cl-topbar {
+    padding: 8px 10px !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .cl-topbar > * { font-size: .85rem; }
+  .cl-sidebar {
+    width: 84vw !important;
+    max-width: 320px !important;
+  }
+  .cl-content {
+    padding: 14px 12px !important;
+  }
+  /* Lesson body: tighter */
+  #lessonBody {
+    padding: 14px 12px !important;
+    font-size: .98rem !important;
+    line-height: 1.6 !important;
+  }
+  #lessonBody h1, #lessonBody h2, #lessonBody h3 {
+    font-size: 1.15rem !important;
+  }
+  /* Welcome screen subject grid: 2 cols max */
+  #wcSubjGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .wc-subj-btn {
+    padding: 14px 8px !important;
+    min-height: 110px !important;
+  }
+  .wc-subj-name {
+    font-size: .82rem !important;
+  }
+  .wc-subj-ico {
+    font-size: 1.6rem !important;
+  }
+  /* Tutor chat dock — FIX: 100% not 100vw (avoids Android scrollbar overflow) */
+  #aiDock {
+    width: 100% !important;
+    height: 75vh !important;
+    height: 75dvh !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    border-radius: 18px 18px 0 0 !important;
+  }
+
+  /* ─── Voice Teacher (Teach Me + Listen) ─── */
+  .lt-action-btns {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .vt-listen-btn,
+  .vt-teach-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 14px 20px !important;
+    font-size: .86rem !important;
+    min-height: var(--mob-touch-min) !important;
+  }
+  /* Floating bar — make it stack on narrow screens */
+  .vt-bar {
+    bottom: max(16px, env(safe-area-inset-bottom)) !important;
+    left: 8px !important;
+    right: 8px !important;
+    transform: none !important;
+    padding: 10px 14px !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+    max-width: none !important;
+    border-radius: 14px !important;
+  }
+  .vt-bar-text {
+    font-size: .78rem !important;
+    flex: 1 1 50% !important;
+  }
+  .vt-bar-sub {
+    font-size: .68rem !important;
+  }
+  .vt-bar-progress {
+    width: 60px !important;
+    flex-shrink: 0 !important;
+  }
+  .vt-bar-btn {
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 8px 12px !important;
+    font-size: .82rem !important;
+  }
+  /* Caption — wider and lower to not overlap bar */
+  .vt-caption {
+    bottom: max(80px, calc(70px + env(safe-area-inset-bottom))) !important;
+    left: 8px !important;
+    right: 8px !important;
+    transform: none !important;
+    max-width: none !important;
+    font-size: .8rem !important;
+    max-height: 100px !important;
+    padding: 12px 16px !important;
+  }
+  /* Highlight outline thinner on mobile */
+  .vt-highlight {
+    outline-width: 2px !important;
+    outline-offset: 2px !important;
+  }
+  /* Speech card */
+  .lt-speech-card {
+    padding: 12px 14px !important;
+    margin-bottom: 16px !important;
+  }
+  .lt-speech-text {
+    font-size: .9rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* ─── Lesson content sections — tighter on mobile ─── */
+  .def-box {
+    padding: 12px 14px !important;
+    margin-bottom: 16px !important;
+  }
+  .expl-section { gap: 10px !important; }
+  .expl-step {
+    padding: 11px !important;
+    gap: 8px !important;
+  }
+  .expl-callout {
+    padding: 11px 13px !important;
+  }
+  .formula-section {
+    padding: 14px !important;
+  }
+  .formula-display {
+    font-size: 1.1rem !important;
+    padding: 8px 16px !important;
+    max-width: calc(100vw - 60px) !important;
+  }
+  .worked-section {
+    padding: 14px !important;
+  }
+  .keyterms-section .kt-card {
+    flex-direction: column !important;
+  }
+  .mnemonic-section {
+    padding: 13px 15px !important;
+  }
+  .exam-tip-section {
+    padding: 13px 15px !important;
+  }
+  /* Quiz options — larger touch targets */
+  .quiz-opt, [onclick*="quizAnswer"] {
+    min-height: var(--mob-touch-min) !important;
+    padding: 12px 14px !important;
+    font-size: .9rem !important;
+  }
+
+  /* ─── Exam Centre ─── */
+  .ec-page, #pg-exam {
+    padding: 10px 8px !important;
+  }
+  .ec-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .ec-card {
+    padding: 14px !important;
+  }
+  /* Exam runner header */
+  .ec-runner-top {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .ec-runner-top > * {
+    font-size: .82rem !important;
+  }
+  /* Question text + options */
+  .examQ-text, #examQuestionArea h2, #examQuestionArea h3 {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+  }
+  .examQ-opt {
+    padding: 12px 14px !important;
+    font-size: .92rem !important;
+    min-height: var(--mob-touch-min) !important;
+  }
+  /* ─── Theory Exam — Complete Mobile Overhaul ─── */
+
+  /* Body stacks vertically */
+  .theory-body { flex-direction: column !important; }
+
+  /* ── Question column: starts COLLAPSED on phones ── */
+  /* Students tap the Q button or floating FAB to read the question,
+     then collapse it again to maximize writing area. */
+  .theory-question-col {
+    width: 100% !important;
+    max-height: 0 !important;
+    border-right: none !important;
+    border-bottom-width: 0 !important;
+    overflow: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    transition: max-height .3s ease, padding .3s ease, border-width .3s ease !important;
+  }
+  /* Collapsed state — same as default on mobile */
+  .theory-question-col.mob-collapsed {
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom-width: 0 !important;
+    overflow: hidden !important;
+  }
+  /* Open state — toggled by Question button / FAB */
+  .theory-question-col.mob-open {
+    max-height: 35vh !important;
+    max-height: 35dvh !important;
+    overflow-y: auto !important;
+    border-bottom: 2px solid rgba(59,130,246,.25) !important;
+  }
+  .tqc-header { padding: 10px 12px !important; }
+  .tqc-qnum { font-size: .72rem !important; margin-bottom: 6px !important; }
+  .tqc-qtext { font-size: .92rem !important; line-height: 1.6 !important; }
+  .tqc-part { padding: 10px 12px !important; }
+  .tqc-part-text { font-size: .86rem !important; }
+  .tqc-marks { flex-wrap: wrap !important; gap: 5px !important; }
+  .tqc-mark-chip, .tqc-type-chip, .tqc-timer-chip {
+    font-size: .64rem !important;
+    padding: 3px 8px !important;
+  }
+  .tqc-body { padding: 10px 12px !important; }
+
+  /* ── Answer column: fill remaining space ── */
+  .theory-answer-col {
+    flex: 1 !important;
+    min-height: 45vh !important;
+    min-height: 45dvh !important;
+    max-height: none !important;
+  }
+
+  /* ── Topbar: compact, all items visible ── */
+  .theory-topbar {
+    padding: 6px 10px !important;
+    gap: 6px !important;
+  }
+  .ttb-left { gap: 6px !important; min-width: 0 !important; flex: 1 !important; }
+  .ttb-title {
+    max-width: 120px !important;
+    font-size: .76rem !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .ttb-exam-badge {
+    font-size: .58rem !important;
+    padding: 2px 7px !important;
+  }
+  .ttb-right { gap: 5px !important; flex-shrink: 0 !important; }
+  .ttb-timer {
+    font-size: .78rem !important;
+    padding: 4px 8px !important;
+    min-width: 52px !important;
+  }
+  .ttb-progress {
+    font-size: .66rem !important;
+    padding: 2px 7px !important;
+  }
+  .ttb-violations {
+    font-size: .64rem !important;
+    padding: 2px 7px !important;
+  }
+  .ttb-btn {
+    padding: 7px 10px !important;
+    font-size: .72rem !important;
+    min-height: 36px !important;
+  }
+  .ttb-btn.green {
+    padding: 7px 14px !important;
+  }
+
+  /* ── Question selector bar: bigger touch targets, smooth scroll ── */
+  .theory-qbar {
+    padding: 8px 10px !important;
+    gap: 6px !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x proximity;
+  }
+  .tqb-btn {
+    min-width: var(--mob-touch-min) !important;
+    height: var(--mob-touch-min) !important;
+    font-size: .82rem !important;
+    border-radius: 10px !important;
+    scroll-snap-align: start;
+  }
+  .tqb-label {
+    font-size: .6rem !important;
+    margin-right: 2px !important;
+  }
+  .tqb-time-warn {
+    font-size: .64rem !important;
+  }
+
+  /* ── Progress bar ── */
+  .theory-progress-bar { height: 3px !important; }
+
+  /* ── Time alert ── */
+  .theory-time-alert {
+    font-size: .72rem !important;
+    padding: 6px 12px !important;
+  }
+
+  /* ── Answer toolbar: compact single-row scroll ── */
+  .theory-toolbar {
+    padding: 4px 6px !important;
+    gap: 3px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .tb-group {
+    flex-shrink: 0 !important;
+    padding-right: 4px !important;
+    margin-right: 1px !important;
+    gap: 2px !important;
+  }
+  .tb-lbl { display: none !important; }
+  .tb-btn {
+    min-height: 34px !important;
+    min-width: 34px !important;
+    padding: 5px 8px !important;
+    font-size: .72rem !important;
+    flex-shrink: 0 !important;
+  }
+  .tb-btn-wide {
+    min-width: auto !important;
+    padding: 5px 10px !important;
+  }
+
+  /* ── Toolkit bar: HIDDEN on phones ── */
+  /* Rich Text / Add Part / Word Count / Table / Rough Work / Quote
+     duplicates the formatting toolbar + add-block bar.
+     Hiding it gives students the full writing area. */
+  .theory-toolkit {
+    display: none !important;
+  }
+
+  /* ── Part tabs: bigger, scrollable ── */
+  .theory-parts-tabs {
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x proximity;
+  }
+  .tpt-tab {
+    min-height: var(--mob-touch-min) !important;
+    padding: 10px 16px !important;
+    font-size: .82rem !important;
+    scroll-snap-align: start;
+    flex-shrink: 0 !important;
+  }
+  .tpt-add {
+    min-height: 40px !important;
+    padding: 8px 14px !important;
+  }
+
+  /* ── Answer booklet header: ULTRA-compact on phone ── */
+  .tap-header { padding: 3px 8px !important; min-height: 0 !important; }
+  .tap-partlabel { font-size: .58rem !important; }
+  .tap-wordcount { font-size: .54rem !important; padding: 1px 6px !important; }
+  .tap-booklet-seal { height: 16px !important; }
+  .tap-booklet-sub { display: none !important; }
+  .tap-booklet-brand { gap: 4px !important; }
+  /* Compact expand button label hidden on tiny screens */
+  .tap-expand-btn { padding: 4px 8px !important; min-height: 30px !important; font-size: .68rem !important; }
+  .tap-expand-icon { font-size: .8rem !important; }
+
+  /* ── Sticky question banner: SUPER compact ── */
+  .tap-q-banner { padding: 4px 8px !important; gap: 4px !important; }
+  .tap-q-banner-label { font-size: .52rem !important; }
+  .tap-q-banner-q { font-size: .68rem !important; }
+  .tap-q-banner-part { font-size: .58rem !important; padding: 1px 6px !important; }
+  .tap-q-banner-show { font-size: .64rem !important; padding: 3px 8px !important; min-height: 26px !important; }
+
+  /* ── Block headers: compact ── */
+  .ab-header { padding: 5px 8px !important; gap: 5px !important; }
+  .ab-num { font-size: .54rem !important; padding: 2px 6px !important; }
+  .ab-type-badge { font-size: .58rem !important; padding: 2px 6px !important; }
+  .ab-expand, .ab-del { min-width: 34px !important; min-height: 34px !important; font-size: .76rem !important; padding: 4px 7px !important; }
+  .ab-expand-label { display: none !important; }
+  .ab-expand { min-width: 34px !important; }
+
+  /* ── "Answer" part-label tab: hide on mobile (banner already says it) ── */
+  .tpt-tab { padding: 4px 10px !important; font-size: .68rem !important; min-height: 26px !important; }
+  .tpt-tab + .tpt-tab { margin-left: 0 !important; }
+
+  /* ── Plan section ── */
+  .tap-plan { padding: 6px 10px !important; }
+  .tap-plan-input {
+    font-size: 16px !important;  /* prevent iOS zoom */
+    height: 48px !important;
+    padding: 8px 10px !important;
+  }
+
+  /* ── Writing area (answer content) — block flow ── */
+  .tap-content {
+    padding: 10px !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    display: block !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* ── Answer blocks: bigger, more space ── */
+  .ab-header {
+    padding: 8px 10px !important;
+    gap: 6px !important;
+  }
+  .ab-textarea {
+    min-height: 120px !important;
+    font-size: 16px !important;  /* prevent iOS zoom */
+    padding: 12px !important;
+    line-height: 1.75 !important;
+  }
+  .ab-del {
+    min-width: 36px !important;
+    min-height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .ab-drag {
+    min-width: 28px !important;
+    min-height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Point-list blocks */
+  .ab-point-row { gap: 6px !important; }
+  .ab-point-input {
+    font-size: 16px !important;  /* prevent iOS zoom */
+    min-height: 40px !important;
+    padding: 6px 4px !important;
+  }
+  .ab-point-num {
+    min-width: 22px !important;
+    margin-top: 10px !important;
+  }
+  .ab-point-del {
+    min-width: 32px !important;
+    min-height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .ab-add-point {
+    min-height: 38px !important;
+    padding: 8px 14px !important;
+    font-size: .78rem !important;
+    margin-left: 28px !important;
+  }
+
+  /* Steps blocks */
+  .ab-step-input {
+    font-size: 16px !important;
+    min-height: 40px !important;
+    padding: 8px 10px !important;
+  }
+  .ab-step-num {
+    min-width: 44px !important;
+    padding-top: 10px !important;
+  }
+
+  /* Equation blocks */
+  .ab-eq-input {
+    font-size: 16px !important;
+    padding: 10px 12px !important;
+  }
+
+  /* Table blocks */
+  .ab-table-wrap {
+    padding: 8px !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .ab-table-cell {
+    font-size: 16px !important;
+    min-height: 40px !important;
+    padding: 8px !important;
+  }
+  .ab-table-row-del {
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+  .ab-table-add-row, .ab-table-add-col {
+    min-height: 38px !important;
+    padding: 8px 14px !important;
+  }
+
+  /* ── Add-block bar: compact horizontal scroll ── */
+  .tap-add-bar {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 4px 8px !important;
+    gap: 4px !important;
+    scrollbar-width: none;
+  }
+  .tap-add-bar::-webkit-scrollbar { display: none; }
+  .tap-add-lbl {
+    flex-shrink: 0 !important;
+    font-size: .54rem !important;
+  }
+  .tap-add-btn {
+    min-height: 34px !important;
+    padding: 5px 10px !important;
+    font-size: .72rem !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* ── Footer: compact, safe-area ── */
+  .theory-footer {
+    padding: 4px 8px !important;
+    padding-bottom: max(6px, env(safe-area-inset-bottom)) !important;
+    gap: 4px !important;
+  }
+  .tf-left {
+    width: 100% !important;
+    justify-content: center !important;
+    font-size: .62rem !important;
+  }
+  .tf-right {
+    width: 100% !important;
+    display: flex !important;
+    gap: 4px !important;
+  }
+  .tf-skip-btn {
+    flex: 1 !important;
+    min-height: 38px !important;
+    padding: 8px 6px !important;
+    font-size: .72rem !important;
+    text-align: center !important;
+  }
+  .tf-submit-btn {
+    flex: 1 !important;
+    min-height: 38px !important;
+    padding: 8px 10px !important;
+    font-size: .76rem !important;
+  }
+
+  /* ── Symbol picker: full-width on mobile ── */
+  .symbol-picker {
+    left: 0 !important;
+    right: 0 !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important;
+  }
+  .sp-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+  }
+  .sp-tab {
+    min-height: 38px !important;
+    padding: 8px 12px !important;
+    flex-shrink: 0 !important;
+  }
+  .sp-grid {
+    max-height: 35vh !important;
+    max-height: 35dvh !important;
+  }
+
+  /* ── Tool panels: FULL SCREEN on phones ── */
+  .tool-panel.open {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    z-index: 10000 !important;
+  }
+  .tool-panel-hdr {
+    cursor: default !important;
+    padding: 14px 16px !important;
+    font-size: .88rem !important;
+  }
+  .tool-close {
+    min-width: var(--mob-touch-min) !important;
+    min-height: var(--mob-touch-min) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.2rem !important;
+  }
+
+  /* ── Drawing Board: full screen, large tool buttons ── */
+  #toolDraw.open {
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+  }
+  .draw-toolbar {
+    padding: 8px 10px !important;
+    gap: 5px !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .draw-tool-btn {
+    min-height: 40px !important;
+    min-width: 40px !important;
+    padding: 8px 10px !important;
+    font-size: .78rem !important;
+    flex-shrink: 0 !important;
+  }
+  .draw-canvas-wrap {
+    flex: 1 !important;
+    min-height: 50vh !important;
+    min-height: 50dvh !important;
+    touch-action: none !important;  /* prevent scroll while drawing */
+  }
+  #drawCanvas {
+    touch-action: none !important;
+  }
+  /* Drawing color/size inputs */
+  #drawColor {
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+  #drawSize {
+    min-width: 80px !important;
+    min-height: 36px !important;
+  }
+
+  /* ── Floating Question FAB (mobile only) — MUCH more prominent ── */
+  .mob-q-fab {
+    position: fixed !important;
+    bottom: max(80px, calc(70px + env(safe-area-inset-bottom))) !important;
+    right: 14px !important;
+    z-index: 950 !important;
+    background: linear-gradient(135deg, #fbbf24, #d97706) !important;
+    color: #0b1220 !important;
+    border: 2px solid #fff !important;
+    border-radius: 100px !important;
+    padding: 13px 20px !important;
+    font-size: .88rem !important;
+    font-weight: 900 !important;
+    font-family: inherit !important;
+    cursor: pointer !important;
+    box-shadow: 0 10px 30px rgba(251,191,36,.55), 0 0 0 4px rgba(251,191,36,.18) !important;
+    display: none; /* JS shows it when question panel collapsed */
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 48px !important;
+    animation: qFabPulse 2.4s ease-in-out infinite !important;
+    letter-spacing: .02em !important;
+  }
+  @keyframes qFabPulse {
+    0%, 100% { box-shadow: 0 10px 30px rgba(251,191,36,.55), 0 0 0 4px rgba(251,191,36,.18); }
+    50%      { box-shadow: 0 10px 36px rgba(251,191,36,.7),  0 0 0 8px rgba(251,191,36,.28); }
+  }
+
+  /* ── Exam rules screen: clean professional layout ── */
+  .erc-topbar {
+    padding: 10px 12px !important;
+    gap: 8px !important;
+  }
+  .erc-topbar-back {
+    min-height: 40px !important;
+    padding: 8px 14px !important;
+  }
+  .erc-topbar-title { font-size: .85rem !important; }
+  .erc-topbar-sub { font-size: .62rem !important; }
+
+  /* Mode chips: single scrollable row */
+  .erc-mode-bar {
+    padding: 8px 12px !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+  }
+  .erc-mode-lbl {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+  .erc-mode-row {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    margin-bottom: 0 !important;
+  }
+  .erc-mode-row::-webkit-scrollbar { display: none; }
+  .erc-mode-chip {
+    min-height: 40px !important;
+    padding: 8px 14px !important;
+    font-size: .76rem !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Topics area: clean scrollable list */
+  .erc-topics-col {
+    padding: 10px 12px !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+  }
+  .erc-topics-hdr {
+    font-size: .68rem !important;
+    margin-bottom: 10px !important;
+    color: rgba(255,255,255,.55) !important;
+  }
+  .erc-topic-scroll {
+    gap: 10px !important;
+    padding-right: 2px !important;
+  }
+  /* ── Topic cards: clear, separated, well-categorized ── */
+  .erc-topic-btn {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 12px 14px !important;
+    background: rgba(255,255,255,.06) !important;
+    border: 1.5px solid rgba(255,255,255,.14) !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2) !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    overflow: visible !important;
+  }
+  .erc-topic-btn.sel {
+    background: rgba(59,130,246,.16) !important;
+    border-color: rgba(59,130,246,.6) !important;
+    box-shadow: 0 2px 10px rgba(59,130,246,.25) !important;
+  }
+  /* Type + year badge row — clear separation */
+  .erc-topic-type {
+    font-size: .6rem !important;
+    color: rgba(147,197,253,.95) !important;
+    font-weight: 800 !important;
+    letter-spacing: .08em !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+    padding-bottom: 6px !important;
+    border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  }
+  /* Question text — clearly below badge row */
+  .erc-topic-text {
+    font-size: .84rem !important;
+    color: rgba(255,255,255,.88) !important;
+    line-height: 1.55 !important;
+    font-family: Georgia, serif !important;
+    margin: 0 !important;
+  }
+  /* Fresh paper card: keep its purple gradient feel */
+  .erc-topic-fresh,
+  .erc-topic-btn[onclick*="generateEssayPaper"] {
+    background: linear-gradient(135deg, rgba(139,92,246,.22), rgba(79,70,229,.14)) !important;
+    border-color: rgba(139,92,246,.45) !important;
+  }
+
+  /* Footer: full-width stacked */
+  .erc-footer {
+    padding: 10px 12px !important;
+    padding-bottom: max(14px, env(safe-area-inset-bottom)) !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .erc-agree-label {
+    min-width: auto !important;
+    font-size: .78rem !important;
+    width: 100% !important;
+  }
+  .erc-start-btn {
+    min-height: var(--mob-touch-min) !important;
+    padding: 12px 24px !important;
+    width: 100% !important;
+    font-size: .88rem !important;
+  }
+
+  /* ── Essay feedback screen ── */
+  .essay-feedback-screen {
+    padding: 20px 12px !important;
+  }
+  .essay-feedback-inner {
+    max-width: 100% !important;
+  }
+  .ef-criterion-row {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .ef-crit-name {
+    min-width: 100% !important;
+    font-size: .76rem !important;
+  }
+
+  /* ── Violation toast: safe-area ── */
+  #essayToast {
+    bottom: max(70px, calc(60px + env(safe-area-inset-bottom))) !important;
+    left: 12px !important;
+    right: 12px !important;
+    transform: none !important;
+    text-align: center !important;
+  }
+
+  /* ── Ghost autocomplete ── */
+  .tap-ghost {
+    font-size: 16px !important;
+    padding: 12px !important;
+  }
+
+  /* ─── Kids Zone ─── */
+  #pg-kids .k-topbar, .k-topbar {
+    padding: 8px 12px !important;
+    flex-wrap: wrap !important;
+  }
+  .k-cat-grid, #kCatGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .kz-letters {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .kz-ltr {
+    min-width: 56px !important;
+    min-height: 56px !important;
+    font-size: 1.4rem !important;
+  }
+  /* Kids game overlay */
+  #kGameOverlay {
+    padding: 12px !important;
+  }
+  #kGameTitle {
+    font-size: 1.3rem !important;
+  }
+  /* Match game grid: keep 2 cols on phone */
+  #kGameBody [style*="grid-template-columns:1fr 1fr"] {
+    gap: 10px !important;
+  }
+  /* Quiz UI */
+  #kGameBody button[onclick*="kQuizAnswer"] {
+    padding: 14px 10px !important;
+    font-size: 1rem !important;
+    min-height: 60px !important;
+  }
+
+  /* ─── Parent Hub ─── */
+  #pg-parent {
+    padding: 12px !important;
+  }
+  .ph-nav, #phTabs {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none;
+  }
+  .ph-nav::-webkit-scrollbar, #phTabs::-webkit-scrollbar { display: none; }
+  .ph-nav-tab, #phTabs button {
+    flex: 0 0 auto !important;
+    padding: 8px 14px !important;
+    font-size: .82rem !important;
+    white-space: nowrap !important;
+  }
+  #phContent {
+    padding: 10px 0 !important;
+  }
+  .ph-card {
+    padding: 14px !important;
+  }
+  .ph-card h3, #phContent h3 {
+    font-size: 1rem !important;
+  }
+  /* Heatmap on phone — let it scroll horizontally */
+  #ph-rich-charts > div:has(> div[style*="grid-template-columns"]) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ─── Live Arena ─── */
+  #pg-arena .ar-header, .ar-header {
+    padding: 10px 12px !important;
+    flex-wrap: wrap !important;
+  }
+  .ar-title { font-size: 1.1rem !important; }
+  .ar-grid, .ar-game-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .ar-lobby-card {
+    padding: 18px 14px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  /* ─── Languages page ─── */
+  #pg-languages [style*="grid-template-columns"][style*="minmax"] {
+    grid-template-columns: 1fr !important;
+  }
+  #pg-languages .lang-flip,
+  #pg-languages [onclick*="langFlip"] {
+    min-height: 140px !important;
+  }
+
+  /* ─── Modals ─── */
+  .lt-auth-card,
+  .lt-lang-modal > div,
+  #lt-child-report > div {
+    margin: 12px !important;
+    padding: 22px 18px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+  /* Prevent iOS auto-zoom on input focus — MUST override class-based font-size */
+  .lt-auth-card input,
+  .lt-auth-card button,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select,
+  .tap-plan-input,
+  .ab-point-input,
+  .ab-textarea,
+  .ab-step-input,
+  .hw-input,
+  .ph-input,
+  .tool-input,
+  .essay-area,
+  [contenteditable="true"] {
+    font-size: 16px !important; /* prevents iOS zoom on focus */
+  }
+
+  /* ─── Tap-to-hear button ─── */
+  #lt-tap-hear {
+    bottom: max(14px, env(safe-area-inset-bottom)) !important;
+    padding: 12px 22px !important;
+    font-size: .9rem !important;
+  }
+
+  /* ─── Generic typography clamps ─── */
+  h1 { font-size: clamp(1.5rem, 6vw, 2.2rem) !important; }
+  h2 { font-size: clamp(1.25rem, 5vw, 1.7rem) !important; }
+  h3 { font-size: clamp(1.05rem, 4vw, 1.3rem) !important; }
+
+  /* Tables: scrollable container */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+}
+
+/* ═══════════ Small phone — ≤ 380px ═══════════ */
+@media (max-width: 380px) {
+  body { font-size: 14px; }
+  #pg-landing .nav-cta { padding: 7px 10px !important; font-size: .78rem !important; }
+  #wcSubjGrid { grid-template-columns: 1fr !important; }
+  .ph-nav-tab, #phTabs button { padding: 7px 10px !important; font-size: .78rem !important; }
+  .kz-ltr { min-width: 48px !important; min-height: 48px !important; font-size: 1.2rem !important; }
+
+  /* Voice teacher — even tighter */
+  .vt-bar {
+    padding: 8px 10px !important;
+    gap: 6px !important;
+  }
+  .vt-bar-icon { font-size: 1rem !important; }
+  .vt-bar-text { font-size: .72rem !important; }
+  .vt-bar-btn { min-width: 36px !important; min-height: 36px !important; padding: 6px 8px !important; }
+  .vt-caption { font-size: .76rem !important; max-height: 80px !important; }
+
+  .formula-display { font-size: .95rem !important; padding: 6px 12px !important; }
+  .lt-speech-text { font-size: .84rem !important; }
+
+  /* ── Theory exam — tiny phone adjustments ── */
+  .theory-question-col {
+    max-height: 30vh !important;
+    max-height: 30dvh !important;
+  }
+  .theory-question-col.mob-open {
+    max-height: 35vh !important;
+    max-height: 35dvh !important;
+  }
+  .tqc-qtext { font-size: .86rem !important; }
+  .tqc-part { padding: 8px 10px !important; }
+  .tqc-part-text { font-size: .82rem !important; }
+  .ttb-exam-badge { display: none !important; }
+  .ttb-title { max-width: 90px !important; font-size: .72rem !important; }
+  .ttb-timer { font-size: .72rem !important; padding: 3px 6px !important; }
+  .tqb-btn {
+    min-width: 38px !important;
+    height: 38px !important;
+    font-size: .76rem !important;
+  }
+  .tb-btn {
+    min-height: 34px !important;
+    min-width: 34px !important;
+    padding: 6px 8px !important;
+    font-size: .72rem !important;
+  }
+  .ttk-btn {
+    min-height: 34px !important;
+    padding: 6px 10px !important;
+    font-size: .72rem !important;
+  }
+  .tap-add-btn {
+    min-height: 36px !important;
+    padding: 7px 10px !important;
+    font-size: .72rem !important;
+  }
+  .ab-textarea {
+    min-height: 100px !important;
+    padding: 10px !important;
+  }
+  .mob-q-fab {
+    padding: 8px 12px !important;
+    font-size: .72rem !important;
+  }
+  .tf-skip-btn, .tf-submit-btn {
+    padding: 8px 6px !important;
+    font-size: .74rem !important;
+  }
+  .draw-tool-btn {
+    min-height: 36px !important;
+    min-width: 36px !important;
+    padding: 6px 8px !important;
+    font-size: .72rem !important;
+  }
+}
+
+/* ═══════════ Tablet — 641-900px ═══════════ */
+@media (min-width: 641px) and (max-width: 900px) {
+  #wcSubjGrid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  #pg-landing [style*="grid-template-columns"][style*="repeat(auto-fit"] {
+    /* Let the auto-fit work; just shrink min */
+  }
+  .cl-sidebar {
+    width: 280px !important;
+  }
+  /* Voice teacher buttons — side by side on tablet */
+  .lt-action-btns {
+    flex-direction: row !important;
+  }
+  .vt-listen-btn,
+  .vt-teach-btn {
+    flex: 1 !important;
+  }
+
+  /* ── Theory exam on tablet — side-by-side but narrower question col ── */
+  .theory-question-col {
+    width: 280px !important;
+  }
+  .tqb-btn {
+    min-width: 38px !important;
+    height: 38px !important;
+  }
+  .tb-btn {
+    min-height: 38px !important;
+    padding: 7px 12px !important;
+  }
+  .ttk-btn {
+    min-height: 38px !important;
+    padding: 7px 12px !important;
+  }
+  .tap-add-btn {
+    min-height: 38px !important;
+    padding: 7px 12px !important;
+  }
+  .tf-skip-btn, .tf-submit-btn {
+    min-height: 40px !important;
+  }
+  /* Tool panels: larger but not full-screen on tablet */
+  .tool-panel.open {
+    max-width: 90vw !important;
+    max-height: 85vh !important;
+    max-height: 85dvh !important;
+  }
+  #toolDraw.open {
+    width: 80vw !important;
+    height: 70vh !important;
+    height: 70dvh !important;
+  }
+  .draw-tool-btn {
+    min-height: 38px !important;
+    min-width: 38px !important;
+    padding: 7px 10px !important;
+  }
+}
+
+/* ═══════════ Landscape phone ═══════════ */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+  /* Hero compress */
+  #pg-landing .hero-h1, #pg-landing h1 {
+    font-size: 1.6rem !important;
+  }
+  /* Theory: in landscape use side-by-side layout */
+  .theory-body { flex-direction: row !important; }
+  .theory-question-col {
+    width: 40% !important;
+    max-height: none !important;
+    border-right: 1px solid var(--cl-border, rgba(255,255,255,.1)) !important;
+    border-bottom: none !important;
+  }
+  .theory-question-col.mob-collapsed,
+  .theory-question-col.mob-open {
+    max-height: none !important;
+    width: 40% !important;
+  }
+  .theory-question-col.mob-collapsed {
+    width: 0 !important;
+    overflow: hidden !important;
+  }
+  /* Voice teacher caption — lower and slimmer in landscape */
+  .vt-caption {
+    max-height: 60px !important;
+    font-size: .76rem !important;
+  }
+  .vt-bar {
+    padding: 8px 14px !important;
+  }
+}
+
+/* ═══════════ iOS notch / Dynamic Island safe areas ═══════════ */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .vt-bar {
+    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  }
+  .vt-caption {
+    bottom: max(80px, calc(70px + env(safe-area-inset-bottom))) !important;
+  }
+  /* Sidebar drawers that slide from left */
+  .cl-sidebar,
+  .k-sidebar {
+    padding-left: max(12px, env(safe-area-inset-left)) !important;
+  }
+}
